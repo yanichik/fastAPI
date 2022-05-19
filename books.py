@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import FastAPI
 from enum import Enum
 BOOKS = {
@@ -15,16 +16,42 @@ class DirectionName(str, Enum):
 
 app = FastAPI()
 
-@app.get("/")
-async def read_all_books(skip_book: str):
+@app.get("/all_books")
+async def read_all_books(skip_book: Optional[str] = None):
     if skip_book:
         new_books = BOOKS.copy()
         new_books.pop(skip_book)
         return new_books
     return BOOKS
 
-@app.get("/{book_name}")
-async def read_book(book_name: str):
+@app.post("/")
+async def create_book(book_title, book_author):
+    last_book_id = int(list(BOOKS.keys())[-1].split('_')[-1])
+    BOOKS[f'book_{last_book_id + 1}'] = {'title': book_title, 'author': book_author}
+    # return BOOKS[f'book_{last_book_id + 1}']
+
+@app.put("/{book_name}")
+async def update_book(book_name: str, book_title: str, book_author: str):
+    BOOKS[book_name] = {'title': book_title, 'author': book_author}
+
+# delete w/ path params
+# @app.delete("/{book_name}")
+# async def remove_book(book_name: str):
+#     del BOOKS[book_name]
+
+# delete w/ query params
+@app.delete("/")
+async def remove_book(book_name: str):
+    del BOOKS[book_name]
+
+# using path params
+# @app.get("/{book_name}")
+# async def read_book(book_name: str):
+#     return BOOKS[book_name]
+
+# using query params
+@app.get("/book/")
+async def read_book(book_name: Optional[str] = 'book_1'):
     return BOOKS[book_name]
 
 @app.get("/books/mybook")
