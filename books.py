@@ -9,9 +9,9 @@ BOOKS = {
 }
 class DirectionName(str, Enum):
     north = 'North'
-    north = 'South'
-    north = 'East'
-    north = 'West'
+    South = 'South'
+    East = 'East'
+    West = 'West'
 
 app = FastAPI()
 
