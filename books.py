@@ -16,7 +16,7 @@ class DirectionName(str, Enum):
 
 app = FastAPI()
 
-@app.get("/all_books")
+@app.get("/all_books/")
 async def read_all_books(skip_book: Optional[str] = None):
     if skip_book:
         new_books = BOOKS.copy()
@@ -29,6 +29,18 @@ async def create_book(book_title, book_author):
     last_book_id = int(list(BOOKS.keys())[-1].split('_')[-1])
     BOOKS[f'book_{last_book_id + 1}'] = {'title': book_title, 'author': book_author}
     # return BOOKS[f'book_{last_book_id + 1}']
+
+# path parameter
+@app.get("/{book_name}")
+async def get_author_from_book_name(book_name: str):
+    return BOOKS[book_name]['author']
+
+# path & query parameter
+# @app.get("/{book_name}")
+# async def get_book_author(book_name: str, book_title: str):
+#     if BOOKS[book_name]['title'] == book_title:
+#         return BOOKS[book_name]['author']
+#     return "Not Found"
 
 @app.put("/{book_name}")
 async def update_book(book_name: str, book_title: str, book_author: str):
