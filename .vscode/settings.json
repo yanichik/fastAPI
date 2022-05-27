@@ -1,4 +1,7 @@
 {
   "python.linting.enabled": false,
-  "python.linting.pylintEnabled": true
+  "python.linting.pylintEnabled": true,
+  "python.analysis.extraPaths": [
+    "./TodoApp/routers"
+  ]
 }
