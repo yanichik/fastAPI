@@ -13,7 +13,9 @@ from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from datetime import datetime, timedelta
 from jose import jwt, JWTError
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/auth", tags=["auth"], responses={404: {"description": "User not found."}}
+)
 
 SECRET_KEY = "mysecretkey"
 ALGORITHM = "HS256"
