@@ -15,7 +15,9 @@ class Users(Base):
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
 
-    todos = relationship("Todos", back_populates="owner")
+    todos = relationship(
+        "Todos", back_populates="owner", cascade="all, delete", passive_deletes=all
+    )
 
 
 class Todos(Base):
@@ -29,6 +31,6 @@ class Todos(Base):
     description = Column(String)
     priority = Column(Integer)
     complete = Column(Boolean, default=False)
-    owner_id = Column(Integer, ForeignKey("users.id"))
+    owner_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
 
     owner = relationship("Users", back_populates="todos")

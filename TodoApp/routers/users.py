@@ -84,13 +84,11 @@ async def delete_user(
     )
     if user_model is None:
         return "User not found"
-    current_user_todos = (
-        db.query(models.Todos).filter(user["id"] == models.Todos.owner_id).all()
-    )
-    if current_user_todos is not None:
-        # for todo in current_user_todos:
-        db.query(models.Todos).filter(models.Todos.owner_id == user_model.id).delete()
-        # db.commit()
+    # current_user_todos = (
+    #     db.query(models.Todos).filter(user["id"] == models.Todos.owner_id).all()
+    # )
+    # if current_user_todos is not None:
+    #     db.query(models.Todos).filter(models.Todos.owner_id == user_model.id).delete()
     db.query(models.Users).filter(user.get("id") == models.Users.id).delete()
     db.commit()
     return successful_response(200)

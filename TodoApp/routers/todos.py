@@ -1,21 +1,24 @@
 import sys
+from urllib.request import Request
 
 sys.path.append("..")
 from typing import Optional
-from fastapi import Depends, HTTPException, APIRouter
+from fastapi import Depends, HTTPException, APIRouter, Request
 from sqlalchemy.orm import Session
 from database import Base
 import models
 from database import engine, SessionLocal
 from pydantic import BaseModel, Field
 from .auth import get_user_exception, get_current_user
-
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 
 router = APIRouter(
     prefix="/todos", tags=["todos"], responses={404: {"description": "Todo not found."}}
 )
 
 models.Base.metadata.create_all(bind=engine)
+templates = Jinja2Templates(directory="templates")
 # create session of our DB, and we close DB regardless of if we get the session or not
 def get_db():
     try:
@@ -40,6 +43,11 @@ class Todo(BaseModel):
                 "complete": False,
             }
         }
+
+
+@router.get("/test")
+async def test(request: Request):
+    return templates.TemplateResponse("home.html", {"request": request})
 
 
 @router.get("/")
